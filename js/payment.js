@@ -1,5 +1,13 @@
 jQuery( document ).ready(function( $ ) {
 
+//If the payment completed succesfully this url will be called
+//to make use of this change it to: var returnUrlCompleted = "https://YOUR_URL_COMPLETED";
+var returnUrlCompleted = undefined; 
+
+//If the payment failed this url will be called
+//to make use of this change it to: var returnUrlFailed = "https://YOUR_URL_FAILED";
+var returnUrlFailed = undefined; 
+
 function getUrlParameter(sParam)
 {
     var sPageURL = window.location.search.substring(1);
@@ -304,10 +312,18 @@ function pay_button_clicked(event) {
                         }
                         clearInterval(interval_id);
                         expiration = null;
+                        
+                        if(typeof returnUrlCompleted !== undefined)
+                            window.location.href = returnUrlCompleted;
+                        
                         return;
                     } else if (status == 'failed') {
                         show_error("ShapeShift.io API returned an error: " + response.error);
                         clearInterval(interval_id); //halt ticking process
+                        
+                        if(typeof returnUrlFailed !== undefined)
+                            window.location.href = returnUrlFailed;
+                            
                         return;
                     }
                 });
